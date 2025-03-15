@@ -13,28 +13,32 @@ const ChangePassword = () => {
     },
     onSubmit: async (data) => {
       await changePassword(data.old_password, data.new_password, data.confirm_password);
-      setTimeout(() => navigate("/dashboard"));
+      navigate("/dashboard");
     },
   });
 
   return (
-    <div>
-      <h2>Change Password</h2>
-      {error && (
-          <div style={{ color: "red" }}>
-            {error.split("\n").map((err, index) => (
-              <p key={index}>{err}</p>
-            ))}
+    <div className="auth-container">
+      <div className="auth-overlay"></div>
+      <div className="auth-card">
+        <h2>Change Password</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <input type="password" name="old_password" className="form-control" placeholder="Old Password" onChange={handleChange} required />
           </div>
-        )}
-      <form onSubmit={handleSubmit}>
-        <input type="password" name="old_password" placeholder="Old Password" onChange={handleChange} required />
-        <input type="password" name="new_password" placeholder="New Password" onChange={handleChange} required />
-        <input type="password" name="confirm_password" placeholder="Confirm New Password" onChange={handleChange} required />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Changing Password..." : "Change Password"}
-        </button>
-      </form>
+          <div className="mb-3">
+            <input type="password" name="new_password" className="form-control" placeholder="New Password" onChange={handleChange} required />
+          </div>
+          <div className="mb-3">
+            <input type="password" name="confirm_password" className="form-control" placeholder="Confirm New Password" onChange={handleChange} required />
+          </div>
+          <button type="submit" className="btn btn-primary" disabled={isLoading}>
+            {isLoading ? "Changing Password..." : "Change Password"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
