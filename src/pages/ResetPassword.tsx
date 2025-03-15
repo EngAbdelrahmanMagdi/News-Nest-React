@@ -1,5 +1,5 @@
 import { useForm } from "../hooks/useForm";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { resetPassword } from "../services/authService";
 
 const ResetPassword = () => {
@@ -22,22 +22,42 @@ const ResetPassword = () => {
   });
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      {error && (
-          <div style={{ color: "red" }}>
-            {error.split("\n").map((err, index) => (
-              <p key={index}>{err}</p>
-            ))}
+    <div className="auth-container">
+      <div className="auth-overlay"></div>
+      <div className="auth-card">
+        <h2>Reset Password</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <input
+              type="password"
+              name="password"
+              className="form-control"
+              placeholder="New Password"
+              onChange={handleChange}
+              required
+            />
           </div>
-        )}
-      <form onSubmit={handleSubmit}>
-        <input type="password" name="password" placeholder="New Password" onChange={handleChange} required />
-        <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} required />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Resetting Password..." : "Reset Password"}
-        </button>
-      </form>
+          <div className="mb-3">
+            <input
+              type="password"
+              name="confirmPassword"
+              className="form-control"
+              placeholder="Confirm Password"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>
+            {isLoading ? "Resetting Password..." : "Reset Password"}
+          </button>
+        </form>
+
+        <p className="auth-links">
+          <Link to="/login">Back to Login</Link>
+        </p>
+      </div>
     </div>
   );
 };
