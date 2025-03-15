@@ -20,3 +20,11 @@ export interface User {
 export type UserIconProps = {
   onClick?: () => void;
 };
+
+export type PreferenceItem = { id: number; name: string };
+
+export interface UserPreferences {
+  categories: number[];
+  sources: number[];
+  authors: number[];
+}
