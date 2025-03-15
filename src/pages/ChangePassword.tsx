@@ -1,31 +1,21 @@
-import { useState } from "react";
+import { useForm } from "../hooks/useForm";
 import { changePassword } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
 const ChangePassword = () => {
-  const [formData, setFormData] = useState({ old_password: "", new_password: "", confirm_password: "" });
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      await changePassword(formData.old_password, formData.new_password, formData.confirm_password);
-      setError(null);
-      setTimeout(() => navigate("/dashboard"), 2000);
-    } catch (error: any) {
-        if (error.response?.data?.errors) {
-            setError(Object.values(error.response.data.errors).flat().join("\n"));
-          } else {
-            setError(error.response?.data?.message || "Changing Password failed");
-        } 
-    }
-  };
+  const { handleChange, handleSubmit, error, isLoading } = useForm({
+    initialState: { old_password: "", new_password: "", confirm_password: "" },
+    validate: (data) => {
+      if (data.new_password !== data.confirm_password) return "Passwords do not match.";
+      return null;
+    },
+    onSubmit: async (data) => {
+      await changePassword(data.old_password, data.new_password, data.confirm_password);
+      setTimeout(() => navigate("/dashboard"));
+    },
+  });
 
   return (
     <div>
@@ -41,7 +31,9 @@ const ChangePassword = () => {
         <input type="password" name="old_password" placeholder="Old Password" onChange={handleChange} required />
         <input type="password" name="new_password" placeholder="New Password" onChange={handleChange} required />
         <input type="password" name="confirm_password" placeholder="Confirm New Password" onChange={handleChange} required />
-        <button type="submit">Change Password</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Changing Password..." : "Change Password"}
+        </button>
       </form>
     </div>
   );

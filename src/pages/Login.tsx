@@ -1,25 +1,17 @@
-import { useState } from "react";
+import { useForm } from "../hooks/useForm";
 import { login } from "../services/authService";
 import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await login(formData.email, formData.password);
-      navigate("/dashboard");
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Login failed");
-    }
-  };
+  const { handleChange, handleSubmit, error, isLoading } = useForm({
+    initialState: { email: "", password: "" },
+    onSubmit: async ({ email, password }) => {
+      await login(email, password);
+      setTimeout(() => navigate("/dashboard"));
+    },
+  });
 
   return (
     <div>
@@ -28,7 +20,7 @@ const Login = () => {
       <form onSubmit={handleSubmit}>
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-        <button type="submit">Login</button>
+        <button type="submit" disabled={isLoading}>{isLoading ? "Logging in..." : "Login"}</button>
       </form>
       <p>
         <Link to="/forgot-password">Forgot Password?</Link>

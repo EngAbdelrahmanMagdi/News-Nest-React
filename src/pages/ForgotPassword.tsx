@@ -1,24 +1,18 @@
 import { useState } from "react";
+import { useForm } from "../hooks/useForm";
 import { forgotPassword } from "../services/authService";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await forgotPassword(email);
-      setMessage("Password reset link sent to your email.");
-    } catch (error: any) {
-      if (error.response?.data?.errors) {
-        setError(Object.values(error.response.data.errors).flat().join("\n"));
-      } else {
-        setError(error.response?.data?.message || "Failed to send reset link");
-      } 
-    }
-  };
+  const { handleChange, handleSubmit, error, isLoading } = useForm({
+    initialState: { email: "" },
+    validate: (data) => (!data.email.includes("@") ? "Invalid email address." : null),
+    onSubmit: async (data) => {
+      await forgotPassword(data.email);
+      setMessage("Check your email for the reset link.");
+    },
+  });
 
   return (
     <div>
@@ -31,8 +25,10 @@ const ForgotPassword = () => {
           </div>
         ) : message}
       <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} required />
-        <button type="submit">Send Reset Link</button>
+        <input type="email" name="email" placeholder="Enter your email" onChange={handleChange} required />
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Sending Reset Link..." : "Send Reset Link"}
+        </button>
       </form>
     </div>
   );

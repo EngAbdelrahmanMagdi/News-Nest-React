@@ -1,33 +1,19 @@
-import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { register } from "../services/authService";
-import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "../hooks/useForm";
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "", confirmPassword: ""});
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      setError("Confirm password field doesn't match password field");
-      return;
-    }
-    try {
-      await register(formData.name, formData.email, formData.password);
+  const { formData, handleChange, handleSubmit, error, isLoading } = useForm({
+    initialState: { name: "", email: "", password: "", confirmPassword: "" },
+    onSubmit: async ({ name, email, password }) => {
+      await register(name, email, password);
       navigate("/dashboard");
-    } catch (error: any) {
-      if (error.response?.data?.errors) {
-        setError(Object.values(error.response.data.errors).flat().join("\n"));
-      } else {
-        setError(error.response?.data?.message || "Registration failed");
-      }    
-    }
-  };
+    },
+    validate: ({ password, confirmPassword }) =>
+      password !== confirmPassword ? "Passwords do not match" : null,
+  });
 
   return (
     <div>
@@ -44,7 +30,7 @@ const Register = () => {
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
         <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} required />
-        <button type="submit">Register</button>
+        <button type="submit" disabled={isLoading}>{isLoading ? "Registering..." : "Register"}</button>
       </form>
       <p>
         Already have an account? <Link to="/login">Log in</Link>
