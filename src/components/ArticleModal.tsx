@@ -1,6 +1,7 @@
 import { Modal, Button } from "react-bootstrap";
+import { ArticleModalProps } from "../types/types";
 
-const ArticleModal = ({ modalArticle, setModalArticle }: any) => (
+const ArticleModal : React.FC<ArticleModalProps> = ({ modalArticle, setModalArticle }) => (
   <Modal show={!!modalArticle} onHide={() => setModalArticle(null)}>
     <Modal.Header closeButton>
       <Modal.Title>{modalArticle?.title}</Modal.Title>

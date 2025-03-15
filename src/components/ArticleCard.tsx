@@ -1,6 +1,7 @@
 import { Card, Button } from "react-bootstrap";
+import { ArticleCardProps } from "../types/types";
 
-const ArticleCard = ({ article, setModalArticle }: any) => (
+const ArticleCard: React.FC<ArticleCardProps> = ({ article, setModalArticle }) => (
   <div className="col-md-4 mb-4">
     <Card className="h-100">
       <a href={article.url} target="_blank" rel="noopener noreferrer">
