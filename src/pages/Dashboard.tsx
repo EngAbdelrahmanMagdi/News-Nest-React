@@ -91,7 +91,9 @@ const Dashboard = () => {
   return (
     <div className="container mt-4">
       {isLoading ? (
-        <div className="spinner"></div>
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
       ) : (
         <>
           <h2>Welcome, {user?.name}</h2>
