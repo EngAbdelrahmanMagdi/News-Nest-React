@@ -11,3 +11,12 @@ export interface UseFormProps {
   onSubmit: (formData: FormState) => Promise<void>;
   validate?: (formData: FormState) => string | null;
 }
+
+export interface User {
+  name: string;
+  email: string;
+}
+
+export type UserIconProps = {
+  onClick?: () => void;
+};
