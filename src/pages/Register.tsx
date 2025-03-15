@@ -5,11 +5,12 @@ import { useForm } from "../hooks/useForm";
 const Register = () => {
   const navigate = useNavigate();
 
-  const { formData, handleChange, handleSubmit, error, isLoading } = useForm({
+  const { handleChange, handleSubmit, error, isLoading } = useForm({
     initialState: { name: "", email: "", password: "", confirmPassword: "" },
     onSubmit: async ({ name, email, password }) => {
       await register(name, email, password);
-      navigate("/dashboard");
+      navigate("/login");
+      window.location.reload();
     },
     validate: ({ password, confirmPassword }) =>
       password !== confirmPassword ? "Passwords do not match" : null,
