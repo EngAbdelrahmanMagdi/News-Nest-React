@@ -1,7 +1,7 @@
 import api from "./api";
 import log from "./utils/logger";
 import { getExtractedToken } from "./utils/tokenUtils";
-import { AuthResponse } from "./utils/authResponse";
+import { AuthResponse } from "../types/types";
 
 /**
  * Register a new user.
