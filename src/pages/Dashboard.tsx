@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUser, logout } from "../services/authService";
+import { getUser } from "../services/authService";
 import { fetchCategories, fetchArticles, fetchAuthors, fetchSources } from "../services/articleService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
@@ -7,6 +7,7 @@ import UserInfo from "../components/UserInfo";
 import Filters from "../components/Filters";
 import ArticlesList from "../components/ArticlesList";
 import ArticleModal from "../components/ArticleModal";
+import NewsNestTitle from "../components/NewsNestTitle";
 import "./spinner.css";
 
 const Dashboard = () => {
@@ -71,14 +72,10 @@ const Dashboard = () => {
     setFilteredArticles(filtered);
   }, [searchTerm, selectedCategory, selectedSource, selectedAuthor, selectedDate, articles]);
 
-  const handleLogout = async () => {
-    await logout();
-    navigate("/login");
-  };
-
   return isLoading ? <Spinner /> : (
     <div className="container mt-4">
       <UserInfo user={user} />
+      <NewsNestTitle />
       <Filters {...{ searchTerm, setSearchTerm, categories, setSelectedCategory, sources, setSelectedSource, authors, setSelectedAuthor, setSelectedDate }} />
       <ArticlesList articles={filteredArticles} setModalArticle={setModalArticle} />
       {modalArticle && <ArticleModal modalArticle={modalArticle} setModalArticle={setModalArticle} />}
