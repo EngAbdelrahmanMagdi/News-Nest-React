@@ -1,6 +1,7 @@
 import api from "./api";
 import { getExtractedToken } from "./utils/tokenUtils";
 import log from "./utils/logger";
+import { UserPreferences } from "../types/types";
 
 export const fetchArticles = async () => {
   try {
@@ -28,5 +29,14 @@ export const fetchSources = async () => {
 
 export const fetchAuthors = async () => {
   const response = await api.get("/api/authors");
+  return response.data;
+};
+
+export const saveUserPreferences = async (preferences: UserPreferences) => {
+  const response = await api.post("/api/user/preferences", preferences, {
+    headers: {
+      Authorization: `Bearer ${getExtractedToken()}`,
+    },
+  });
   return response.data;
 };
