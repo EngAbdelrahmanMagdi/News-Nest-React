@@ -15,3 +15,18 @@ export const fetchArticles = async () => {
     throw error;
   }
 };
+
+export const fetchCategories = async () => {
+  const response = await api.get("/api/categories");
+  return response.data;
+};
+
+export const fetchSources = async () => {
+  const response = await api.get("/api/sources");
+  return response.data;
+};
+
+export const fetchAuthors = async () => {
+  const response = await api.get("/api/authors");
+  return response.data;
+};
