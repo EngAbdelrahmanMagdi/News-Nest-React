@@ -1,6 +1,5 @@
 import api from "./api";
 import log from "./utils/logger";
-import { getExtractedToken } from "./utils/tokenUtils";
 import { AuthResponse } from "../types/types";
 
 /**
@@ -67,17 +66,11 @@ export const resetPassword = async (email: string, token: string, password: stri
  * Change Password.
  */
 export const changePassword = async (oldPassword: string, newPassword: string, confirmPassword: string) => {
-
   try {
-
-    return api.post("/api/change-password", { 
-      old_password: oldPassword, 
-      new_password: newPassword, 
-      confirm_password: confirmPassword 
-    }, {
-      headers: {
-        Authorization: `Bearer ${getExtractedToken()}`,
-      },
+    return api.post("/api/change-password", {
+      old_password: oldPassword,
+      new_password: newPassword,
+      confirm_password: confirmPassword,
     });
   } catch (error: any) {
     log.error("Login Error:", error.response?.data || error.message);
@@ -90,13 +83,8 @@ export const changePassword = async (oldPassword: string, newPassword: string, c
  * Log out a user.
  */
 export const logout = async () => {
-
   try {
-    await api.post("/api/logout", {}, {
-      headers: {
-        Authorization: `Bearer ${getExtractedToken()}`,
-      },
-    });
+    await api.post("/api/logout");
     localStorage.removeItem("token");
   } catch (error: any) {
     log.error("Logout Error:", error.response?.data || error.message);
@@ -109,12 +97,7 @@ export const logout = async () => {
  */
 export const getUser = async () => {
   try {
-    const response = await api.get("/api/user", {
-      headers: {
-        Authorization: `Bearer ${getExtractedToken()}`,
-      },
-    });
-    log.info("User Info:", response.data);
+    const response = await api.get("/api/user");
     return response.data;
   } catch (error: any) {
     log.error("Fetch User Error:", error.response?.data || error.message);

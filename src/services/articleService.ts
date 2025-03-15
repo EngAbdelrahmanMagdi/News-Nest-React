@@ -3,13 +3,12 @@ import { getExtractedToken } from "./utils/tokenUtils";
 import log from "./utils/logger";
 import { UserPreferences } from "../types/types";
 
+/**
+ * Fetch articles.
+ */
 export const fetchArticles = async () => {
   try {
-    const response = await api.get("/api/articles", {
-      headers: {
-        Authorization: `Bearer ${getExtractedToken()}`,
-      },
-    });
+    const response = await api.get("/api/articles");
     return response.data;
   } catch (error: any) {
     log.error("Fetch Articles Error:", error.response?.data || error.message);
@@ -17,26 +16,54 @@ export const fetchArticles = async () => {
   }
 };
 
+/**
+ * Fetch categories.
+ */
 export const fetchCategories = async () => {
-  const response = await api.get("/api/categories");
-  return response.data;
+  try {
+    const response = await api.get("/api/categories");
+    return response.data;
+  } catch (error: any) {
+    log.error("Fetch Categories Error:", error);
+    throw error;
+  }
 };
 
+/**
+ * Fetch sources.
+ */
 export const fetchSources = async () => {
-  const response = await api.get("/api/sources");
-  return response.data;
+  try {
+    const response = await api.get("/api/sources");
+    return response.data;
+  } catch (error: any) {
+    log.error("Fetch Sources Error:", error);
+    throw error;
+  }
 };
 
+/**
+ * Fetch authors.
+ */
 export const fetchAuthors = async () => {
-  const response = await api.get("/api/authors");
-  return response.data;
+  try {
+    const response = await api.get("/api/authors");
+    return response.data;
+  } catch (error: any) {
+    log.error("Fetch Authors Error:", error);
+    throw error;
+  }
 };
 
+/**
+ * Save user preferences.
+ */
 export const saveUserPreferences = async (preferences: UserPreferences) => {
-  const response = await api.post("/api/user/preferences", preferences, {
-    headers: {
-      Authorization: `Bearer ${getExtractedToken()}`,
-    },
-  });
-  return response.data;
+  try {
+    const response = await api.post("/api/user/preferences", preferences);
+    return response.data;
+  } catch (error: any) {
+    log.error("Save Preferences Error:", error);
+    throw error;
+  }
 };
