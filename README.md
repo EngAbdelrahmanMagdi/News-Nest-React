@@ -52,7 +52,7 @@ npm start
 
 
 
-## Introduction
+## Description
 
 - NewsNest is a full-featured news aggregation platform that allows users to:
 
@@ -76,6 +76,8 @@ npm start
 - Personalized Experience: Update news preferences for a customized feed.
 
 - Mobile Responsive: Optimized for all screen sizes.
+
+![MyReadsImg](public/NewsNest-Mobile.png)
 
 
 <h4>Made by / Abdelrahman Magdy</h4>
